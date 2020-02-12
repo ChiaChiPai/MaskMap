@@ -70,7 +70,7 @@ function showPosition(position) {
                 pin = greyIcon;
             } else if (data[i].properties.mask_adult < data[i].properties.mask_child) {
                 pin = orangeIcon;
-            } else if (data[i].properties.mask_adult > data[i].properties.mask_child) {
+            } else if (data[i].properties.mask_adult >= data[i].properties.mask_child) {
                 pin = greenIcon;
             }
             markers.addLayer(L.marker([data[i].geometry.coordinates[1], data[i].geometry.coordinates[0]], { icon: pin }).bindPopup(`
