@@ -68,11 +68,9 @@ function showPosition(position) {
             let pin = "";
             if (data[i].properties.mask_adult == 0 && data[i].properties.mask_child == 0) {
                 pin = greyIcon;
-            } else if (data[i].properties.mask_adult < data[i].properties.mask_child) {
+            } else {
                 pin = orangeIcon;
-            } else if (data[i].properties.mask_adult >= data[i].properties.mask_child) {
-                pin = greenIcon;
-            }
+            } 
             markers.addLayer(L.marker([data[i].geometry.coordinates[1], data[i].geometry.coordinates[0]], { icon: pin }).bindPopup(`
                 <ul class="information">
                     <li class="text-dark pharmacy">${data[i].properties.name}</li>
