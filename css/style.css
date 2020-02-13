@@ -10790,6 +10790,123 @@ h1, h2, h3, h4, h5, h6,
   margin-bottom: 0;
 }
 
+.map-burgerBtn {
+  z-index: 800;
+  display: inline-block;
+  position: absolute;
+  height: 40px;
+  padding: 0 5px;
+  cursor: pointer;
+  -webkit-transition: all .8s;
+  transition: all .8s;
+  left: 8px;
+  top: 3px;
+}
+
+.map-burgerBtn:hover {
+  background-color: rgba(165, 211, 192, 0.925);
+}
+
+.map-burgerBtn div {
+  background-color: #06B76C;
+  width: 30px;
+  height: 2px;
+  margin-top: 8px;
+  -webkit-transition: all .8s;
+  transition: all .8s;
+}
+
+.map-burgerBtn .active > .line1:nth-child(1) {
+  -webkit-transform: translateY(10px) rotate(315deg);
+          transform: translateY(10px) rotate(315deg);
+}
+
+.map-burgerBtn .active > .line2:nth-child(2) {
+  opacity: 0;
+}
+
+.map-burgerBtn .active > .line3:nth-child(3) {
+  -webkit-transform: translateY(-10px) rotate(45deg);
+          transform: translateY(-10px) rotate(45deg);
+}
+
+.search-burgerBtn {
+  z-index: 999;
+  display: inline-block;
+  position: absolute;
+  height: 40px;
+  padding: 0 5px;
+  cursor: pointer;
+  -webkit-transition: all .8s;
+  transition: all .8s;
+  right: 8px;
+  top: 3px;
+}
+
+.search-burgerBtn:hover {
+  background-color: rgba(165, 211, 192, 0.925);
+}
+
+.search-burgerBtn div {
+  background-color: #06B76C;
+  width: 30px;
+  height: 2px;
+  margin-top: 8px;
+  -webkit-transition: all .8s;
+  transition: all .8s;
+}
+
+.search-burgerBtn > .line1:nth-child(1) {
+  -webkit-transform: translateY(10px) rotate(315deg);
+          transform: translateY(10px) rotate(315deg);
+}
+
+.search-burgerBtn > .line2:nth-child(2) {
+  opacity: 0;
+}
+
+.search-burgerBtn > .line3:nth-child(3) {
+  -webkit-transform: translateY(-10px) rotate(45deg);
+          transform: translateY(-10px) rotate(45deg);
+}
+
+.searchBar {
+  height: 100vh;
+  -webkit-transform: translateX(-100%);
+          transform: translateX(-100%);
+  -webkit-transition: all .3s;
+  transition: all .3s;
+  background-color: #fff;
+  position: absolute;
+  z-index: 900;
+}
+
+@media (min-width: 768px) {
+  .searchBar {
+    height: calc(100vh - 129px);
+    position: static;
+    -webkit-transform: translateX(0);
+            transform: translateX(0);
+  }
+}
+
+.searchBar.active {
+  -webkit-transform: translateX(0);
+          transform: translateX(0);
+}
+
+.infoList {
+  background-color: #fff;
+  padding: 10px 15px;
+  height: calc(100vh - 220px);
+}
+
+@media (min-width: 768px) {
+  .infoList {
+    height: calc(100vh - 349px);
+  }
+}
+
 .form-group .form-control {
   padding-top: 0;
   padding-bottom: 0;
@@ -10863,6 +10980,10 @@ h1, h2, h3, h4, h5, h6,
   margin: 0;
 }
 
+.leaflet-left .leaflet-control-zoom {
+  display: none;
+}
+
 .idCardSet {
   font-size: 18px;
   background-color: #4A4A4A;
@@ -10911,9 +11032,15 @@ h1, h2, h3, h4, h5, h6,
   color: red;
 }
 
-#map {
+.map {
   width: 100%;
-  height: calc(100vh - 129px);
+  height: 100vh;
+}
+
+@media (min-width: 768px) {
+  .map {
+    height: calc(100vh - 129px);
+  }
 }
 
 .marker-cluster-small {

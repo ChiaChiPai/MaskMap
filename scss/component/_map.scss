@@ -1,7 +1,10 @@
 // map
-#map { 
+.map { 
     width: 100%;
-    height: calc(100vh - 129px); 
+    height: 100vh; 
+    @media(min-width: 768px){
+      height: calc(100vh - 129px); 
+    }
 }
 
 .marker-cluster-small {

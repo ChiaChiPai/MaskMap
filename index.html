@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="img/mask.png">
+    <link rel="shortcut icon" href="img/mask.svg">
     <title>Mask MAP</title>
     <link rel="stylesheet" href="css/style.css">
     <script defer src="https://use.fontawesome.com/releases/v5.0.0/js/all.js"></script>
@@ -14,7 +14,7 @@
 </head>
 <body>
     <div class="container-fluid" style="padding: 0">
-        <header class="row bg-primary text-white no-gutters justify-content-between">
+        <header class="row bg-primary text-white no-gutters justify-content-between d-none d-md-flex">
             <div class="col-3 p-3">
                 <p class="h5" style="line-height: 22px;"><i class="far fa-calendar"></i><span class="js-year"></span>/</p>
                 <p style="font-size: 36px; line-height: 50px;">
@@ -47,7 +47,12 @@
             </div>
         </header>
         <div class="row no-gutters">
-            <div class="col-3" style="height: calc(100vh - 129px);">
+            <div class="col-md-3 col-8 searchBar js-searchBar">
+                <div class="search-burgerBtn d-md-none" id="js-search-burgerBtn">
+                    <div class="line1"></div>
+                    <div class="line2"></div>
+                    <div class="line3"></div>
+                </div>
                 <div class="text-dark" style="padding: 20px 36px;">
                     <div class="form-group">
                         <label for="exampleInputPassword1">搜尋位置</label>
@@ -64,16 +69,20 @@
                     <button class="btn-primary btn-search" id="js-searchBtn">搜尋</button>
                 </div>
                 <hr class="m-0">
-                <div class="overflow-auto" style="padding: 10px 15px; height: calc(100vh - 349px);">
+                <div class="overflow-auto infoList">
                     <h5 class="h6 text-dark" id="js-pharmacyNum"></h5>
                     <div id="js-maskInfoList">
                     <!-- 藥局資訊 -->
                     </div>
                 </div>
             </div>
-            
-            <div class="col-9 position-relative">
-                <div id="map"></div>
+            <div class="col-12 col-md-9 position-relative">
+                <div class="map-burgerBtn d-md-none" id="js-map-burgerBtn">
+                    <div class="line1"></div>
+                    <div class="line2"></div>
+                    <div class="line3"></div>
+                </div>
+                <div id="map" class="map"></div>
                 <a class="goBackPosition js-goBackPosition">
                     <i class="fas fa-crosshairs" style="color:rgb(82, 81, 81)"></i>
                 </a>

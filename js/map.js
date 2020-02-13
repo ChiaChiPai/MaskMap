@@ -54,7 +54,7 @@ function showPosition(position) {
     map.addLayer(selfPos);
 
     //使用 MarkerClusterGroup 將各個地點群組化
-    var markers = new L.MarkerClusterGroup().addTo(map);
+    var markers = new L.MarkerClusterGroup();
 
     //取得 AJAX 資料
     let data = [];
@@ -68,9 +68,11 @@ function showPosition(position) {
             let pin = "";
             if (data[i].properties.mask_adult == 0 && data[i].properties.mask_child == 0) {
                 pin = greyIcon;
-            } else {
+            } else if(data[i].properties.mask_adult < data[i].properties.mask_child) {
                 pin = orangeIcon;
-            } 
+            } else if (data[i].properties.mask_adult >= data[i].properties.mask_child) {
+                pin = greenIcon;
+            }
             markers.addLayer(L.marker([data[i].geometry.coordinates[1], data[i].geometry.coordinates[0]], { icon: pin }).bindPopup(`
                 <ul class="information">
                     <li class="text-dark pharmacy">${data[i].properties.name}</li>
@@ -209,6 +211,7 @@ function showPosition(position) {
                     infoPointer[i].addEventListener('click', function (e) {
                         Lat = e.currentTarget.dataset.lat;
                         Lng = e.currentTarget.dataset.lng;
+                        searchBar.classList.remove('active');
                         map.setView([Lat, Lng], 20);
                     });
                 }
@@ -350,5 +353,19 @@ function saveID() {
             break;
     }
 }
+
+//控制 searchBar 滑入滑出
+let mapBurgerBtn = document.querySelector('#js-map-burgerBtn');
+let searchBurgerBtn = document.querySelector('#js-search-burgerBtn');
+let searchBar = document.querySelector('.js-searchBar');
+
+mapBurgerBtn.addEventListener('click',function(){
+    searchBar.classList.add('active');
+})
+
+searchBurgerBtn.addEventListener('click',function(){
+    searchBar.classList.remove('active');
+})
+
 
 
