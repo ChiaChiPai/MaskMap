@@ -1,8 +1,6 @@
 /* eslint-disable no-undef */
-if (navigator.geolocation) {
-  navigator.geolocation.getCurrentPosition(showPosition, showError)
-} else {
-  alert('您的瀏覽器不支援定位系統')
+// error code
+const showError = (error) => {
   const position = {
     coords: {
       latitude: '23.8523405',
@@ -10,9 +8,27 @@ if (navigator.geolocation) {
     },
     zoom: 7
   }
-  showPosition(position)
+  switch (error.code) {
+    case error.PERMISSION_DENIED:
+      alert('讀取不到您目前的位置')
+      showPosition(position)
+      break
+    case error.POSITION_UNAVAILABLE:
+      alert('讀取不到您目前的位置')
+      showPosition(position)
+      break
+    case error.TIMEOUT:
+      alert('讀取位置逾時')
+      showPosition(position)
+      break
+    case error.UNKNOWN_ERROR:
+      alert('Error')
+      showPosition(position)
+      break
+  }
 }
-function showPosition (position) {
+
+const showPosition = (position) => {
   const map = L.map('map').setView([position.coords.latitude, position.coords.longitude], position.zoom || 17)
 
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -61,7 +77,7 @@ function showPosition (position) {
   const xhr = new XMLHttpRequest()
   xhr.open('get', 'https://raw.githubusercontent.com/kiang/pharmacies/master/json/points.json')
   xhr.send()
-  xhr.onload = function () {
+  xhr.onload = () => {
     data = JSON.parse(xhr.responseText).features
 
     for (let i = 0; data.length > i; i++) {
@@ -74,30 +90,30 @@ function showPosition (position) {
         pin = greenIcon
       }
       markers.addLayer(L.marker([data[i].geometry.coordinates[1], data[i].geometry.coordinates[0]], { icon: pin }).bindPopup(`
-                <ul class="information">
-                    <li class="text-dark pharmacy">${data[i].properties.name}</li>
-                    <li class="text-dark address"><a href="https://www.google.com.tw/maps/place/${data[i].properties.address}"  target="_blank">${data[i].properties.address} <img src="img/規劃路徑.png" alt=""></a></li>
-                    <li class="text-light phone">${data[i].properties.phone}</li>
-                    <li class="text-light openTime">${data[i].properties.note || '該店家沒供營業時間'}</li>
-                    <li class="mt-2">
-                        <div class="row maskNum no-gutters text-white">
-                            <div class="col-6 bg-primary py-1" style="padding: 0 24px">
-                                <p>成人口罩數量</p>
-                                <p class="d-flex align-items-end">
-                                    <span style="font-size:21px line-height:25px"">${data[i].properties.mask_adult}</span> 
-                                    <span class="ml-auto">/200</span>
-                                </p>
-                            </div>
-                            <div class="col-6 bg-warning py-1" style="padding: 0 24px">
-                                <p>兒童口罩數量</p>
-                                <p class="d-flex align-items-end">
-                                    <span style="font-size:21px line-height:25px">${data[i].properties.mask_child}</span>
-                                    <span class="ml-auto">/50</span>
-                                </p>
-                            </div>
-                        </div>
-                    </li>
-                </ul>`))
+        <ul class="information">
+            <li class="text-dark pharmacy">${data[i].properties.name}</li>
+            <li class="text-dark address"><a href="https://www.google.com.tw/maps/place/${data[i].properties.address}"  target="_blank">${data[i].properties.address} <img src="img/規劃路徑.png" alt=""></a></li>
+            <li class="text-light phone">${data[i].properties.phone}</li>
+            <li class="text-light openTime">${data[i].properties.note || '該店家沒供營業時間'}</li>
+            <li class="mt-2">
+                <div class="row maskNum no-gutters text-white">
+                    <div class="col-6 bg-primary py-1" style="padding: 0 24px">
+                        <p>成人口罩數量</p>
+                        <p class="d-flex align-items-end">
+                            <span style="font-size:21px line-height:25px"">${data[i].properties.mask_adult}</span> 
+                            <span class="ml-auto">/200</span>
+                        </p>
+                    </div>
+                    <div class="col-6 bg-warning py-1" style="padding: 0 24px">
+                        <p>兒童口罩數量</p>
+                        <p class="d-flex align-items-end">
+                            <span style="font-size:21px line-height:25px">${data[i].properties.mask_child}</span>
+                            <span class="ml-auto">/50</span>
+                        </p>
+                    </div>
+                </div>
+            </li>
+        </ul>`))
     }
     map.addLayer(markers)
 
@@ -108,7 +124,7 @@ function showPosition (position) {
     const searchBtn = document.querySelector('#js-searchBtn')
     const pharmacyNumText = document.querySelector('#js-pharmacyNum')
 
-    const searchAddress = function (e) {
+    const searchAddress = (e) => {
       if (e.keyCode === 13 || e.type === 'click') { // 同時可以按enter和clickBTN的方法
         let searchList = []
         const pharmacyStore = []
@@ -123,25 +139,25 @@ function showPosition (position) {
                 pharmacyStore.push(data[i])
                 const pharmacyNum = pharmacyStore.length
                 const str = `
-                            <ul class="information mt-3 js-info" data-lat="${data[i].geometry.coordinates[1]}" data-lng="${data[i].geometry.coordinates[0]}" style="cursor:pointer">
-                                <li class="text-dark pharmacy">${data[i].properties.name}</li>
-                                <li class="text-dark address">${data[i].properties.address}</li>
-                                <li class="text-light phone">${data[i].properties.phone}</li>
-                                <li class="text-light openTime"><i class="far fa-clock"></i> ${data[i].properties.note || '該店家沒供營業時間'}</li>
-                                <li class="mt-3">
-                                    <div class="row maskNum no-gutters text-white">
-                                        <div class="col-6 bg-primary px-2 py-2 d-flex justify-content-between">
-                                            <p>成人口罩</p>
-                                            <p>${data[i].properties.mask_adult} 個</p>
-                                        </div>
-                                        <div class="col-6 bg-warning px-2 py-2 d-flex justify-content-between">
-                                            <p>兒童口罩</p>
-                                            <p>${data[i].properties.mask_child} 個</p>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                            `
+                  <ul class="information mt-3 js-info" data-lat="${data[i].geometry.coordinates[1]}" data-lng="${data[i].geometry.coordinates[0]}" style="cursor:pointer">
+                      <li class="text-dark pharmacy">${data[i].properties.name}</li>
+                      <li class="text-dark address">${data[i].properties.address}</li>
+                      <li class="text-light phone">${data[i].properties.phone}</li>
+                      <li class="text-light openTime"><i class="far fa-clock"></i> ${data[i].properties.note || '該店家沒供營業時間'}</li>
+                      <li class="mt-3">
+                          <div class="row maskNum no-gutters text-white">
+                              <div class="col-6 bg-primary px-2 py-2 d-flex justify-content-between">
+                                  <p>成人口罩</p>
+                                  <p>${data[i].properties.mask_adult} 個</p>
+                              </div>
+                              <div class="col-6 bg-warning px-2 py-2 d-flex justify-content-between">
+                                  <p>兒童口罩</p>
+                                  <p>${data[i].properties.mask_child} 個</p>
+                              </div>
+                          </div>
+                      </li>
+                  </ul>
+                  `
                 searchList += str
                 pharmacyNumText.textContent = `共有${pharmacyNum}處可購買口罩`
               }
@@ -205,7 +221,7 @@ function showPosition (position) {
         const infoPointer = document.querySelectorAll('.js-info')
 
         for (let i = 0; i < pharmacyStore.length; i++) {
-          infoPointer[i].addEventListener('click', function (e) {
+          infoPointer[i].addEventListener('click', (e) => {
             Lat = e.currentTarget.dataset.lat
             Lng = e.currentTarget.dataset.lng
             searchBar.classList.remove('active')
@@ -219,14 +235,17 @@ function showPosition (position) {
     searchBlock.addEventListener('keydown', searchAddress)
     // 回到目前位置
     const goBackPosition = document.querySelector('.js-goBackPosition')
-    goBackPosition.addEventListener('click', function () {
+    goBackPosition.addEventListener('click', () => {
       map.setView([position.coords.latitude, position.coords.longitude], 17)
     })
   }
 }
 
-// error code
-function showError (error) {
+// 尋找目前定位
+if (navigator.geolocation) {
+  navigator.geolocation.getCurrentPosition(showPosition, showError)
+} else {
+  alert('您的瀏覽器不支援定位系統')
   const position = {
     coords: {
       latitude: '23.8523405',
@@ -234,24 +253,7 @@ function showError (error) {
     },
     zoom: 7
   }
-  switch (error.code) {
-    case error.PERMISSION_DENIED:
-      alert('讀取不到您目前的位置')
-      showPosition(position)
-      break
-    case error.POSITION_UNAVAILABLE:
-      alert('讀取不到您目前的位置')
-      showPosition(position)
-      break
-    case error.TIMEOUT:
-      alert('讀取位置逾時')
-      showPosition(position)
-      break
-    case error.UNKNOWN_ERROR:
-      alert('Error')
-      showPosition(position)
-      break
-  }
+  showPosition(position)
 }
 
 // 日期
@@ -279,6 +281,7 @@ days[5] = '五'
 days[6] = '六'
 
 day.textContent = days[dt.getDay()]
+
 // 往後加七天，第八天才能買
 // eslint-disable-next-line no-extend-native
 Date.prototype.addDays = function (days) {
@@ -310,13 +313,11 @@ if (today === '一' || today === '三' || today === '五') {
 }
 
 // 設定尾碼
-idCardSet.addEventListener('click', function () {
+idCardSet.addEventListener('click', () => {
   popBox.classList.remove('d-none')
 })
 
-idSaveBtn.addEventListener('click', saveID)
-
-function saveID () {
+const saveID = () => {
   switch (true) {
     case idNumBlock.value < 0:
       note.textContent = '尾碼沒有負的吧'
@@ -347,15 +348,17 @@ function saveID () {
   }
 }
 
+idSaveBtn.addEventListener('click', saveID)
+
 // 控制 searchBar 滑入滑出
 const mapBurgerBtn = document.querySelector('#js-map-burgerBtn')
 const searchBurgerBtn = document.querySelector('#js-search-burgerBtn')
 const searchBar = document.querySelector('.js-searchBar')
 
-mapBurgerBtn.addEventListener('click', function () {
+mapBurgerBtn.addEventListener('click', () => {
   searchBar.classList.add('active')
 })
 
-searchBurgerBtn.addEventListener('click', function () {
+searchBurgerBtn.addEventListener('click', () => {
   searchBar.classList.remove('active')
 })
