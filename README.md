@@ -3,9 +3,9 @@
 
 ![](https://i.imgur.com/Kgjw3wT.png)
 ## 一、 使用技術
-leafletjs 地圖繪製工具
+Leaflet 地圖框架
 
-OpenStreetMap 地圖模型
+Openstreetmap 圖資
 
 L.icon.pluse 圖標插件
 
