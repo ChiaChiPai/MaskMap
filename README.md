@@ -26,7 +26,7 @@ MarkerClusterGroup 圖標統合功能
 - 畫面 RWD 自適應
 
 ## 四、畫面介紹
-### - 地圖依縮放改變細節
+## - 地圖依縮放改變細節
 ![](https://i.imgur.com/otx6eII.png)
 ***
 ### - 自動定位使用者位置功能
