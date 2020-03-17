@@ -26,22 +26,27 @@ MarkerClusterGroup 圖標統合功能
 - 畫面 RWD 自適應
 
 ## 四、畫面介紹
-### - **地圖依縮放改變細節**
+### - 地圖依縮放改變細節
+
 ![](https://i.imgur.com/otx6eII.png)
 ***
 ### - 自動定位使用者位置功能
+
 ![](https://i.imgur.com/JvOfMjw.png)
 ***
 
 ### - 身分證尾碼辨識今天是否可以買口罩
+
 ![](https://i.imgur.com/jvoOilM.png)
 ***
 
 ### - 模糊搜尋並顯示口罩數量
+
 ![](https://i.imgur.com/5YejFD0.png)
 ***
 
 ### - 查看地圖上藥局資訊
+
 ![](https://i.imgur.com/Z8dvKrT.png)
 
 ### 更多功能查看請上 [DEMO](https://chiachipai.github.io/MaskMap/)
