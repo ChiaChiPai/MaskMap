@@ -1,6 +1,11 @@
-# 使用 leaflet + OSM 實作口罩地圖
-## 一、 leaflet 基礎使用
-[leaflet網站](https://leafletjs.com/)
+# 口罩地圖
+:不侷限自己是 junior 工程師，也要用自己的一份力量為社會做一些事
+![](https://i.imgur.com/Kgjw3wT.png)
+## 一、 使用技術
+leafletjs 地圖繪製工具
+OpenStreetMap 地圖模型
+L.icon.pluse 圖標插件
+HTML5 定位功能
 ### 1.載入 Css 及 JavaScript
 ```
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" >
