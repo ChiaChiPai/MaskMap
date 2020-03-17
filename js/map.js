@@ -79,42 +79,41 @@ const showPosition = (position) => {
   xhr.send()
   xhr.onload = () => {
     data = JSON.parse(xhr.responseText).features
-
-    for (let i = 0; data.length > i; i++) {
+    data.forEach((item) => {
       let pin = ''
-      if (data[i].properties.mask_adult === 0 && data[i].properties.mask_child === 0) {
+      if (item.properties.mask_adult === 0 && item.properties.mask_child === 0) {
         pin = greyIcon
-      } else if (data[i].properties.mask_adult < data[i].properties.mask_child) {
+      } else if (item.properties.mask_adult < item.properties.mask_child) {
         pin = orangeIcon
-      } else if (data[i].properties.mask_adult >= data[i].properties.mask_child) {
+      } else if (item.properties.mask_adult >= item.properties.mask_child) {
         pin = greenIcon
       }
-      markers.addLayer(L.marker([data[i].geometry.coordinates[1], data[i].geometry.coordinates[0]], { icon: pin }).bindPopup(`
+      markers.addLayer(L.marker([item.geometry.coordinates[1], item.geometry.coordinates[0]], { icon: pin }).bindPopup(`
         <ul class="information">
-            <li class="text-dark pharmacy">${data[i].properties.name}</li>
-            <li class="text-dark address"><a href="https://www.google.com.tw/maps/place/${data[i].properties.address}"  target="_blank">${data[i].properties.address} <img src="img/規劃路徑.png" alt=""></a></li>
-            <li class="text-light phone">${data[i].properties.phone}</li>
-            <li class="text-light openTime">${data[i].properties.note || '該店家沒供營業時間'}</li>
+            <li class="text-dark pharmacy">${item.properties.name}</li>
+            <li class="text-dark address"><a href="https://www.google.com.tw/maps/place/${item.properties.address}"  target="_blank">${item.properties.address} <img src="img/規劃路徑.png" alt=""></a></li>
+            <li class="text-light phone">${item.properties.phone}</li>
+            <li class="text-light openTime">${item.properties.note || '該店家沒供營業時間'}</li>
             <li class="mt-2">
                 <div class="row maskNum no-gutters text-white">
                     <div class="col-6 bg-primary py-1" style="padding: 0 24px">
                         <p>成人口罩數量</p>
                         <p class="d-flex align-items-end">
-                            <span style="font-size:21px line-height:25px"">${data[i].properties.mask_adult}</span> 
+                            <span style="font-size:21px line-height:25px"">${item.properties.mask_adult}</span> 
                             <span class="ml-auto">/200</span>
                         </p>
                     </div>
                     <div class="col-6 bg-warning py-1" style="padding: 0 24px">
                         <p>兒童口罩數量</p>
                         <p class="d-flex align-items-end">
-                            <span style="font-size:21px line-height:25px">${data[i].properties.mask_child}</span>
+                            <span style="font-size:21px line-height:25px">${item.properties.mask_child}</span>
                             <span class="ml-auto">/50</span>
                         </p>
                     </div>
                 </div>
             </li>
         </ul>`))
-    }
+    })
     map.addLayer(markers)
 
     // 搜尋列
@@ -132,27 +131,27 @@ const showPosition = (position) => {
           pharmacyNumText.textContent = '請輸入你要尋找的區域'
           return
         }
-        for (let i = 0; i < data.length; i++) {
-          if (data[i].properties.address.indexOf(searchBlock.value.trim()) !== -1) { // 模糊搜尋
-            if (data[i].properties.mask_child !== 0 || data[i].properties.mask_adult !== 0) {
+        data.forEach(function (item) {
+          if (item.properties.address.indexOf(searchBlock.value.trim()) !== -1) { // 模糊搜尋
+            if (item.properties.mask_child !== 0 || item.properties.mask_adult !== 0) {
               if (maskTypeOpt.value === '全部') {
-                pharmacyStore.push(data[i])
+                pharmacyStore.push(item)
                 const pharmacyNum = pharmacyStore.length
                 const str = `
-                  <ul class="information mt-3 js-info" data-lat="${data[i].geometry.coordinates[1]}" data-lng="${data[i].geometry.coordinates[0]}" style="cursor:pointer">
-                      <li class="text-dark pharmacy">${data[i].properties.name}</li>
-                      <li class="text-dark address">${data[i].properties.address}</li>
-                      <li class="text-light phone">${data[i].properties.phone}</li>
-                      <li class="text-light openTime"><i class="far fa-clock"></i> ${data[i].properties.note || '該店家沒供營業時間'}</li>
+                  <ul class="information mt-3 js-info" data-lat="${item.geometry.coordinates[1]}" data-lng="${item.geometry.coordinates[0]}" style="cursor:pointer">
+                      <li class="text-dark pharmacy">${item.properties.name}</li>
+                      <li class="text-dark address">${item.properties.address}</li>
+                      <li class="text-light phone">${item.properties.phone}</li>
+                      <li class="text-light openTime"><i class="far fa-clock"></i> ${item.properties.note || '該店家沒供營業時間'}</li>
                       <li class="mt-3">
                           <div class="row maskNum no-gutters text-white">
                               <div class="col-6 bg-primary px-2 py-2 d-flex justify-content-between">
                                   <p>成人口罩</p>
-                                  <p>${data[i].properties.mask_adult} 個</p>
+                                  <p>${item.properties.mask_adult} 個</p>
                               </div>
                               <div class="col-6 bg-warning px-2 py-2 d-flex justify-content-between">
                                   <p>兒童口罩</p>
-                                  <p>${data[i].properties.mask_child} 個</p>
+                                  <p>${item.properties.mask_child} 個</p>
                               </div>
                           </div>
                       </li>
@@ -162,20 +161,20 @@ const showPosition = (position) => {
                 pharmacyNumText.textContent = `共有${pharmacyNum}處可購買口罩`
               }
             }
-            if (data[i].properties.mask_child !== 0 && maskTypeOpt.value === '兒童口罩') {
-              pharmacyStore.push(data[i])
+            if (item.properties.mask_child !== 0 && maskTypeOpt.value === '兒童口罩') {
+              pharmacyStore.push(item)
               const pharmacyNum = pharmacyStore.length
               const str = `
-                        <ul class="information mt-3 js-info" data-lat="${data[i].geometry.coordinates[1]}" data-lng="${data[i].geometry.coordinates[0]}" style="cursor:pointer">
-                            <li class="text-dark pharmacy">${data[i].properties.name}</li>
-                            <li class="text-dark address">${data[i].properties.address}</li>
-                            <li class="text-light phone">${data[i].properties.phone}</li>
-                            <li class="text-light openTime"><i class="far fa-clock"></i> ${data[i].properties.note || '該店家沒供營業時間'}</li>
+                        <ul class="information mt-3 js-info" data-lat="${item.geometry.coordinates[1]}" data-lng="${item.geometry.coordinates[0]}" style="cursor:pointer">
+                            <li class="text-dark pharmacy">${item.properties.name}</li>
+                            <li class="text-dark address">${item.properties.address}</li>
+                            <li class="text-light phone">${item.properties.phone}</li>
+                            <li class="text-light openTime"><i class="far fa-clock"></i> ${item.properties.note || '該店家沒供營業時間'}</li>
                             <li class="mt-3">
                                 <div class="row maskNum no-gutters text-white">
                                     <div class="col-12 bg-warning px-2 py-2 d-flex justify-content-between">
                                         <p>兒童口罩</p>
-                                        <p>${data[i].properties.mask_child} 個</p>
+                                        <p>${item.properties.mask_child} 個</p>
                                     </div>
                                 </div>
                             </li>
@@ -184,20 +183,20 @@ const showPosition = (position) => {
               searchList += str
               pharmacyNumText.textContent = `共有${pharmacyNum}處可購買兒童口罩`
             }
-            if (data[i].properties.mask_adult !== 0 && maskTypeOpt.value === '成人口罩') {
-              pharmacyStore.push(data[i])
+            if (item.properties.mask_adult !== 0 && maskTypeOpt.value === '成人口罩') {
+              pharmacyStore.push(item)
               const pharmacyNum = pharmacyStore.length
               const str = `
-                        <ul class="information mt-3 js-info" data-lat="${data[i].geometry.coordinates[1]}" data-lng="${data[i].geometry.coordinates[0]}" style="cursor:pointer">
-                            <li class="text-dark pharmacy">${data[i].properties.name}</li>
-                            <li class="text-dark address">${data[i].properties.address}</li>
-                            <li class="text-light phone">${data[i].properties.phone}</li>
-                            <li class="text-light openTime"><i class="far fa-clock"></i> ${data[i].properties.note || '該店家沒供營業時間'}</li>
+                        <ul class="information mt-3 js-info" data-lat="${item.geometry.coordinates[1]}" data-lng="${item.geometry.coordinates[0]}" style="cursor:pointer">
+                            <li class="text-dark pharmacy">${item.properties.name}</li>
+                            <li class="text-dark address">${item.properties.address}</li>
+                            <li class="text-light phone">${item.properties.phone}</li>
+                            <li class="text-light openTime"><i class="far fa-clock"></i> ${item.properties.note || '該店家沒供營業時間'}</li>
                             <li class="mt-3">
                                 <div class="row maskNum no-gutters text-white">
                                     <div class="col-12 bg-primary px-2 py-2 d-flex justify-content-between">
                                         <p>成人口罩</p>
-                                        <p>${data[i].properties.mask_adult} 個</p>
+                                        <p>${item.properties.mask_adult} 個</p>
                                     </div>
                                 </div>
                             </li>
@@ -207,7 +206,7 @@ const showPosition = (position) => {
               pharmacyNumText.textContent = `共有${pharmacyNum}處可購買成人口罩`
             }
           }
-        }
+        })
 
         maskInfoList.innerHTML = searchList
         // 使地圖對應到搜尋相對應的位置
@@ -219,15 +218,14 @@ const showPosition = (position) => {
 
         // 點選藥局改變地圖位置pharmacyNumText
         const infoPointer = document.querySelectorAll('.js-info')
-
-        for (let i = 0; i < pharmacyStore.length; i++) {
-          infoPointer[i].addEventListener('click', (e) => {
+        pharmacyStore.forEach(function (item, key) {
+          infoPointer[key].addEventListener('click', (e) => {
             Lat = e.currentTarget.dataset.lat
             Lng = e.currentTarget.dataset.lng
             searchBar.classList.remove('active')
             map.setView([Lat, Lng], 20)
           })
-        }
+        })
       }
     }
 
