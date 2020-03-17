@@ -131,7 +131,14 @@ const showPosition = (position) => {
           pharmacyNumText.textContent = '請輸入你要尋找的區域'
           return
         }
-        data.forEach(function (item) {
+
+        const allSort = data.sort((a, b) => {
+          const second = b.properties.mask_adult + b.properties.mask_child
+          const first = a.properties.mask_adult + a.properties.mask_child
+          return second - first
+        })
+
+        allSort.forEach(function (item) {
           if (item.properties.address.indexOf(searchBlock.value.trim()) !== -1) { // 模糊搜尋
             if (item.properties.mask_child !== 0 || item.properties.mask_adult !== 0) {
               if (maskTypeOpt.value === '全部') {
@@ -161,49 +168,72 @@ const showPosition = (position) => {
                 pharmacyNumText.textContent = `共有${pharmacyNum}處可購買口罩`
               }
             }
-            if (item.properties.mask_child !== 0 && maskTypeOpt.value === '兒童口罩') {
-              pharmacyStore.push(item)
-              const pharmacyNum = pharmacyStore.length
-              const str = `
-                        <ul class="information mt-3 js-info" data-lat="${item.geometry.coordinates[1]}" data-lng="${item.geometry.coordinates[0]}" style="cursor:pointer">
-                            <li class="text-dark pharmacy">${item.properties.name}</li>
-                            <li class="text-dark address">${item.properties.address}</li>
-                            <li class="text-light phone">${item.properties.phone}</li>
-                            <li class="text-light openTime"><i class="far fa-clock"></i> ${item.properties.note || '該店家沒供營業時間'}</li>
-                            <li class="mt-3">
-                                <div class="row maskNum no-gutters text-white">
-                                    <div class="col-12 bg-warning px-2 py-2 d-flex justify-content-between">
-                                        <p>兒童口罩</p>
-                                        <p>${item.properties.mask_child} 個</p>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                        `
-              searchList += str
-              pharmacyNumText.textContent = `共有${pharmacyNum}處可購買兒童口罩`
+          }
+        })
+
+        const childSort = data.sort((a, b) => {
+          return b.properties.mask_child - a.properties.mask_child
+        })
+
+        childSort.forEach(function (item) {
+          if (item.properties.address.indexOf(searchBlock.value.trim()) !== -1) { // 模糊搜尋
+            if (item.properties.mask_child !== 0 || item.properties.mask_adult !== 0) {
+              if (item.properties.mask_child !== 0 && maskTypeOpt.value === '兒童口罩') {
+                pharmacyStore.push(item)
+                const pharmacyNum = pharmacyStore.length
+                const str = `
+                          <ul class="information mt-3 js-info" data-lat="${item.geometry.coordinates[1]}" data-lng="${item.geometry.coordinates[0]}" style="cursor:pointer">
+                              <li class="text-dark pharmacy">${item.properties.name}</li>
+                              <li class="text-dark address">${item.properties.address}</li>
+                              <li class="text-light phone">${item.properties.phone}</li>
+                              <li class="text-light openTime"><i class="far fa-clock"></i> ${item.properties.note || '該店家沒供營業時間'}</li>
+                              <li class="mt-3">
+                                  <div class="row maskNum no-gutters text-white">
+                                      <div class="col-12 bg-warning px-2 py-2 d-flex justify-content-between">
+                                          <p>兒童口罩</p>
+                                          <p>${item.properties.mask_child} 個</p>
+                                      </div>
+                                  </div>
+                              </li>
+                          </ul>
+                          `
+                searchList += str
+                pharmacyNumText.textContent = `共有${pharmacyNum}處可購買兒童口罩`
+              }
             }
-            if (item.properties.mask_adult !== 0 && maskTypeOpt.value === '成人口罩') {
-              pharmacyStore.push(item)
-              const pharmacyNum = pharmacyStore.length
-              const str = `
-                        <ul class="information mt-3 js-info" data-lat="${item.geometry.coordinates[1]}" data-lng="${item.geometry.coordinates[0]}" style="cursor:pointer">
-                            <li class="text-dark pharmacy">${item.properties.name}</li>
-                            <li class="text-dark address">${item.properties.address}</li>
-                            <li class="text-light phone">${item.properties.phone}</li>
-                            <li class="text-light openTime"><i class="far fa-clock"></i> ${item.properties.note || '該店家沒供營業時間'}</li>
-                            <li class="mt-3">
-                                <div class="row maskNum no-gutters text-white">
-                                    <div class="col-12 bg-primary px-2 py-2 d-flex justify-content-between">
-                                        <p>成人口罩</p>
-                                        <p>${item.properties.mask_adult} 個</p>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                        `
-              searchList += str
-              pharmacyNumText.textContent = `共有${pharmacyNum}處可購買成人口罩`
+          }
+        })
+
+        const adultSort = data.sort((a, b) => {
+          return b.properties.mask_adult - a.properties.mask_adult
+        })
+
+        adultSort.forEach(function (item) {
+          if (item.properties.address.indexOf(searchBlock.value.trim()) !== -1) { // 模糊搜尋
+            if (item.properties.mask_child !== 0 || item.properties.mask_adult !== 0) {
+              if (item.properties.mask_adult !== 0 && maskTypeOpt.value === '成人口罩') {
+                pharmacyStore.push(item)
+                const pharmacyNum = pharmacyStore.length
+                const str = `
+                          <ul class="information mt-3 js-info" data-lat="${item.geometry.coordinates[1]}" data-lng="${item.geometry.coordinates[0]}" style="cursor:pointer">
+                              <li class="text-dark pharmacy">${item.properties.name}</li>
+                              <li class="text-dark address">${item.properties.address}</li>
+                              <li class="text-light phone">${item.properties.phone}</li>
+                              <li class="text-light openTime"><i class="far fa-clock"></i> ${item.properties.note || '該店家沒供營業時間'}</li>
+                              <li class="mt-3">
+                                  <div class="row maskNum no-gutters text-white">
+                                      <div class="col-12 bg-primary px-2 py-2 d-flex justify-content-between">
+                                          <p>成人口罩</p>
+                                          <p>${item.properties.mask_adult} 個</p>
+                                      </div>
+                                  </div>
+                              </li>
+                          </ul>
+                          `
+                searchList += str
+                pharmacyNumText.textContent = `共有${pharmacyNum}處可購買成人口罩`
+                console.log('成人')
+              }
             }
           }
         })
