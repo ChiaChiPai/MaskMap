@@ -238,9 +238,14 @@ const showPosition = (position) => {
           }
         })
 
+        if (pharmacyStore.length === 0) {
+          pharmacyNumText.textContent = '找不到這個關鍵字喔'
+        } else {
+          map.setView([pharmacyStore[0].geometry.coordinates[1], pharmacyStore[0].geometry.coordinates[0]], 15)
+        }
+
         maskInfoList.innerHTML = searchList
         // 使地圖對應到搜尋相對應的位置
-        map.setView([pharmacyStore[0].geometry.coordinates[1], pharmacyStore[0].geometry.coordinates[0]], 15)
 
         if (searchList.length === 0) {
           pharmacyNumText.textContent = '您搜尋的關鍵字目前找不到口罩'
